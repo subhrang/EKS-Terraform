@@ -1,11 +1,11 @@
 variable "region" {
-  default     = "us-east-2"
+  default     = "us-east-1"
   description = "AWS region"
 }
 
 provider "aws" {
   version = ">= 2.28.1"
-  region  = "us-east-2"
+  region  = "us-east-1"
 }
 
 data "aws_availability_zones" "available" {}
@@ -34,6 +34,7 @@ module "vpc" {
 
   tags = {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+    auto-delete = "no"
   }
 
   public_subnet_tags = {

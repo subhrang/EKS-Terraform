@@ -7,24 +7,25 @@ module "eks" {
     Environment = "training"
     GithubRepo  = "terraform-aws-eks"
     GithubOrg   = "terraform-aws-modules"
+    auto-delete = "no"
   }
 
   vpc_id = module.vpc.vpc_id
 
-  worker_groups = [
+  node_groups = [
     {
-      name                          = "worker-group-1"
+      name                          = "node-group-1"
       instance_type                 = "t2.small"
-      additional_userdata           = "echo foo bar"
-      asg_desired_capacity          = 2
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
+      desired_capacity          = 2
+      min_capacity		= 2
+      source_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
     },
     {
-      name                          = "worker-group-2"
+      name                          = "node-group-2"
       instance_type                 = "t2.medium"
-      additional_userdata           = "echo foo bar"
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
-      asg_desired_capacity          = 1
+      source_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
+      desired_capacity          = 1
+      min_capacity		= 1
     },
   ]
 }
